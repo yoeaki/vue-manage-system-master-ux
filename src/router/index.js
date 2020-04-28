@@ -27,7 +27,7 @@ export default new Router({
                 {
                     path: '/table',
                     component: () => import(/* webpackChunkName: "table" */ '../components/user/student/StudentReservation.vue'),
-                    meta: { title: '基础表格' }
+                    meta: { title: '学员预约记录' }
                 },
                 {
                     path: '/tabs',
@@ -110,10 +110,12 @@ export default new Router({
                 {
                     path: '/studentInfo',
                     component: () => import(/* webpackChunkName: "register" */ '../components/user/student/MyInfo.vue'),
+                    meta: { title: '学员信息' }
                 },
                 {
                     path: '/studentEvaluation',
                     component: () => import(/* webpackChunkName: "register" */ '../components/user/student/StudentEvaluation.vue'),
+                    meta: { title: '学员评论' }
                 }
             ]
         },

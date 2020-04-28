@@ -1,51 +1,184 @@
 <template>
-    <div>
-        <el-col :span="12">
-            <el-menu
-                    default-active="2"
-                    class="el-menu-vertical-demo"
-                    @open="handleOpen"
-                    @close="handleClose"
-                    background-color="#545c64"
-                    text-color="#fff"
-                    active-text-color="#ffd04b">
-                <el-submenu index="1">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span>预约练车</span>
-                    </template>
-                    <el-menu-item-group>
-                        <el-menu-item index="1-1">预约教练</el-menu-item>
-                        <el-menu-item index="1-2">预约记录</el-menu-item>
-                        <el-menu-item index="1-3">处理记录</el-menu-item>
-                    </el-menu-item-group>
-                </el-submenu>
-                <el-submenu index="2">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span>我的教练</span>
-                    </template>
-                    <el-menu-item-group>
-                        <el-menu-item index="2-1">教练信息</el-menu-item>
-                        <el-menu-item index="2-2">教练学员</el-menu-item>
-                        <el-menu-item index="2-3">学员评价</el-menu-item>
-                    </el-menu-item-group>
-                </el-submenu>
-                <el-menu-item index="3" disabled>
-                    <i class="el-icon-document"></i>
-                    <span slot="title">关于平台</span>
-                </el-menu-item>
-            </el-menu>
-        </el-col>
+    <div class="sidebar">
+        <el-menu
+            class="sidebar-el-menu"
+            :default-active="onRoutes"
+            :collapse="collapse"
+            background-color="#324157"
+            text-color="#bfcbd9"
+            active-text-color="#20a0ff"
+            unique-opened
+            router
+        >
+            <template v-for="item in items">
+                <template v-if="item.subs">
+                    <el-submenu :index="item.index" :key="item.index">
+                        <template slot="title">
+                            <i :class="item.icon"></i>
+                            <span slot="title">{{ item.title }}</span>
+                        </template>
+                        <template v-for="subItem in item.subs">
+                            <el-submenu
+                                v-if="subItem.subs"
+                                :index="subItem.index"
+                                :key="subItem.index"
+                            >
+                                <template slot="title">{{ subItem.title }}</template>
+                                <el-menu-item
+                                    v-for="(threeItem,i) in subItem.subs"
+                                    :key="i"
+                                    :index="threeItem.index"
+                                >{{ threeItem.title }}</el-menu-item>
+                            </el-submenu>
+                            <el-menu-item
+                                v-else
+                                :index="subItem.index"
+                                :key="subItem.index"
+                            >{{ subItem.title }}</el-menu-item>
+                        </template>
+                    </el-submenu>
+                </template>
+                <template v-else>
+                    <el-menu-item :index="item.index" :key="item.index">
+                        <i :class="item.icon"></i>
+                        <span slot="title">{{ item.title }}</span>
+                    </el-menu-item>
+                </template>
+            </template>
+        </el-menu>
     </div>
 </template>
 
 <script>
+import bus from '../../../components/common/bus';
 export default {
-  name: 'CoachMenu'
-}
+    data() {
+        return {
+            collapse: false,
+            items: [
+                {
+                    icon: 'el-icon-lx-home',
+                    index: 'dashboard',
+                    title: '啦啦啦'
+                },
+                {
+                    icon: 'el-icon-lx-cascades',
+                    index: 'table',
+                    title: '预约练车'
+                },
+                {
+                    icon: 'el-icon-lx-copy',
+                    index: 'tabs',
+                    title: 'tab选项卡'
+                },
+                {
+                    icon: 'el-icon-lx-calendar',
+                    index: '3',
+                    title: '预约练车',
+                    subs: [
+                        {
+                            index: 'form',
+                            title: '预约教练'
+                        },
+                        {
+                            index: 'table',
+                            title: '预约记录'
+                        },
+                        {
+                            index: 'process',
+                            title: '预约流程'
+                        }
+                    ]
+                },
+                {
+                    icon: 'el-icon-lx-emoji',
+                    index: 'icon',
+                    title: '自定义图标'
+                },
+                {
+                    icon: 'el-icon-pie-chart',
+                    index: 'charts',
+                    title: 'schart图表'
+                },
+                {
+                    icon: 'el-icon-rank',
+                    index: '6',
+                    title: '我的教练',
+                    subs: [
+                        {
+                            index: 'drag',
+                            title: '教练信息'
+                        },
+                        {
+                            index: 'table',
+                            title: '教练学员'
+                        }
+                        ,
+                        {
+                            index: 'studentEvaluation',
+                            title: '练车评价'
+                        }
+                    ]
+                },
+                {
+                    icon: 'el-icon-lx-global',
+                    index: 'i18n',
+                    title: '国际化功能'
+                },
+                {
+                    icon: 'el-icon-lx-warn',
+                    index: '7',
+                    title: '错误处理',
+                    subs: [
+                        {
+                            index: 'permission',
+                            title: '权限测试'
+                        },
+                        {
+                            index: '404',
+                            title: '404页面'
+                        }
+                    ]
+                },
+                {
+                    icon: 'el-icon-lx-redpacket_fill',
+                    index: '/donate',
+                    title: '支持作者'
+                }
+            ]
+        };
+    },
+    computed: {
+        onRoutes() {
+            return this.$route.path.replace('/', '');
+        }
+    },
+    created() {
+        // 通过 Event Bus 进行组件间通信，来折叠侧边栏
+        bus.$on('collapse', msg => {
+            this.collapse = msg;
+            bus.$emit('collapse-content', msg);
+        });
+    }
+};
 </script>
 
 <style scoped>
-
+.sidebar {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 70px;
+    bottom: 0;
+    overflow-y: scroll;
+}
+.sidebar::-webkit-scrollbar {
+    width: 0;
+}
+.sidebar-el-menu:not(.el-menu--collapse) {
+    width: 250px;
+}
+.sidebar > ul {
+    height: 100%;
+}
 </style>
