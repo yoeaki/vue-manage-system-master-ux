@@ -58,93 +58,24 @@ export default {
             items: [
                 {
                     icon: 'el-icon-lx-home',
-                    index: 'dashboard',
-                    title: '啦啦啦'
-                },
-                {
-                    icon: 'el-icon-lx-cascades',
-                    index: 'table',
-                    title: '预约练车'
-                },
-                {
-                    icon: 'el-icon-lx-copy',
-                    index: 'tabs',
-                    title: 'tab选项卡'
+                    index: 'coachDashboard',
+                    title: '系统首页'
                 },
                 {
                     icon: 'el-icon-lx-calendar',
                     index: '3',
-                    title: '预约练车',
+                    title: '我的学员',
                     subs: [
                         {
-                            index: 'form',
-                            title: '预约教练'
+                            index: 'myStudent',
+                            title: '学员信息'
                         },
                         {
-                            index: 'table',
-                            title: '预约记录'
-                        },
-                        {
-                            index: 'process',
-                            title: '预约流程'
+                            index: 'myReservation',
+                            title: '学员预约'
                         }
                     ]
                 },
-                {
-                    icon: 'el-icon-lx-emoji',
-                    index: 'icon',
-                    title: '自定义图标'
-                },
-                {
-                    icon: 'el-icon-pie-chart',
-                    index: 'charts',
-                    title: 'schart图表'
-                },
-                {
-                    icon: 'el-icon-rank',
-                    index: '6',
-                    title: '我的教练',
-                    subs: [
-                        {
-                            index: 'drag',
-                            title: '教练信息'
-                        },
-                        {
-                            index: 'table',
-                            title: '教练学员'
-                        }
-                        ,
-                        {
-                            index: 'studentEvaluation',
-                            title: '练车评价'
-                        }
-                    ]
-                },
-                {
-                    icon: 'el-icon-lx-global',
-                    index: 'i18n',
-                    title: '国际化功能'
-                },
-                {
-                    icon: 'el-icon-lx-warn',
-                    index: '7',
-                    title: '错误处理',
-                    subs: [
-                        {
-                            index: 'permission',
-                            title: '权限测试'
-                        },
-                        {
-                            index: '404',
-                            title: '404页面'
-                        }
-                    ]
-                },
-                {
-                    icon: 'el-icon-lx-redpacket_fill',
-                    index: '/donate',
-                    title: '支持作者'
-                }
             ]
         };
     },

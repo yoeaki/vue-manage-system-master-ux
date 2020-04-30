@@ -55,7 +55,7 @@
                     <div class="container">
                         <div>
                             <el-table
-                                    :data="car"
+                                    :data="cars"
                                     style="width: 100%">
                                 <el-table-column
                                         prop="id"
@@ -94,7 +94,7 @@
                     address: '',
                     price:''
                 },
-                car:[]
+                cars:[]
             }
         },
         created(){
@@ -135,7 +135,7 @@
                 let _this = this;
                 axios.get('api/coach/car/coach/' + coachId).then(function(res) {
                     let data = res.data.data;
-                    _this.car = data;
+                    _this.cars = data;
                     console.log(_this.car)
                 })
             }
