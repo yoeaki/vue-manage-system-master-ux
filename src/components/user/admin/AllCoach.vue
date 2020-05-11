@@ -21,6 +21,7 @@
                 </el-select>
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="openAdd">新增教练</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -49,54 +50,24 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+       
+        <el-dialog title="新增教练" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="开始时间">
-                    <el-col :span="11">
-                        <el-date-picker
-                                type="date"
-                                placeholder="选择日期"
-                                v-model="form.startTime"
-                                value-format="yyyy-MM-dd"
-                                style="width: 100%;"
-                        ></el-date-picker>
-                    </el-col>
-                    <el-col class="line" :span="2">-</el-col>
-                    <el-col :span="11">
-                        <el-time-picker
-                                placeholder="选择时间"
-                                v-model="form.startTime"
-                                style="width: 100%;"
-                        ></el-time-picker>
-                    </el-col>
+                <el-form-item label="教练名称">
+                    <el-input v-model="coach.username"></el-input>
                 </el-form-item>
-                <el-form-item label="结束时间">
-                    <el-col :span="11">
-                        <el-date-picker
-                                type="date"
-                                placeholder="选择日期"
-                                v-model="form.endTime"
-                                value-format="yyyy-MM-dd"
-                                style="width: 100%;"
-                        ></el-date-picker>
-                    </el-col>
-                    <el-col class="line" :span="2">-</el-col>
-                    <el-col :span="11">
-                        <el-time-picker
-                                placeholder="选择时间"
-                                v-model="form.endTime"
-                                style="width: 100%;"
-                        ></el-time-picker>
-                    </el-col>
+                <el-form-item label="登录密码">
+                    <el-input v-model="coach.password"></el-input>
                 </el-form-item>
-                <el-form-item label="预约备注">
-                    <el-input type="textarea" rows="5" v-model="form.remarks"></el-input>
+                <el-form-item label="车辆名称">
+                    <el-input v-model="car.name"></el-input>
+                </el-form-item>
+                <el-form-item label="车牌号">
+                    <el-input v-model="car.number"></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
-            </span>
+            <el-button @click="editVisible = false">取 消</el-button>
+            <el-button type="primary" @click="addCoach">确 定</el-button>
         </el-dialog>
     </div>
 </template>
@@ -115,6 +86,15 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
+            car:{
+                name:'',
+                number:'',
+                coachId:''
+            },
+            coach:{
+                username:'',
+                password:'123456',
+            },
             tableData: [],
             multipleSelection: [],
             delList: [],
@@ -132,7 +112,7 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         list() {
-            let path = '/api/coach/coach/list/' + localStorage.getItem('ms_id');
+            let path = '/api/coach/coach/list';
             let _this = this;
             console.log(path)
             axios.get(path).then(function(res) {
@@ -141,6 +121,28 @@ export default {
             }).catch(function(error) {
                 console.log(error)
             })
+        },
+        openAdd(){
+            this.editVisible = true;
+        },
+        addCoach(){
+            let _this = this;
+            _this.editVisible = false;
+            axios.post('/api/coach/coach',_this.coach).then(function(res) {
+                _this.load();
+                axios.post('/api/coach/car',_this.car).then(function(res) {
+                    _this.$message.success("新增成功")
+                    _this.list()
+                });
+            });
+        },
+        load(){
+            let _this = this;
+            axios.get('/api/coach/coach/load',_this.coach.username).then(function(res) {
+                let data = res.data.data;
+                console.log(data)
+                _this.car.coachId = data.id;
+            });
         },
         // 触发搜索按钮
         handleSearch() {

@@ -28,6 +28,7 @@
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
+
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>

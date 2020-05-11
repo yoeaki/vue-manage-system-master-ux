@@ -142,11 +142,44 @@ export default new Router({
                     path: '/myReservation',
                     component: () => import(/* webpackChunkName: "register" */ '../components/user/coach/MyReservation.vue'),
                     meta: { title: '学员预约' }
-                }
+                },
+                //管理员模块
+                {
+                    path: '/adminInfo',
+                    component: () => import(/* webpackChunkName: "register" */ '../components/user/admin/MyInfo.vue'),
+                    meta: { title: '我的个人信息' }
+                },
+                {
+                    path: '/adminDashboard',
+                    component: () => import(/* webpackChunkName: "register" */ '../components/user/admin/AdminDashboard.vue'),
+                    meta: { title: '系统首页' }
+                },
+                {
+                    path: '/allStudent',
+                    component: () => import(/* webpackChunkName: "register" */ '../components/user/admin/AllStudent.vue'),
+                    meta: { title: '学员信息' }
+                },
+                {
+                    path: '/allCoach',
+                    component: () => import(/* webpackChunkName: "register" */ '../components/user/admin/AllCoach.vue'),
+                    meta: { title: '教练信息' }
+                },{
+                    path: '/coachReservation',
+                    component: () => import(/* webpackChunkName: "register" */ '../components/user/admin/TeachArrange.vue'),
+                    meta: { title: '教学安排' }
+                },{
+                    path: '/announcement',
+                    component: () => import(/* webpackChunkName: "register" */ '../components/user/admin/Announcement.vue'),
+                    meta: { title: '公告信息' }
+                },
+                {
+                    path: '/audit',
+                    component: () => import(/* webpackChunkName: "register" */ '../components/user/admin/Audit.vue'),
+                    meta: { title: '教练注册审核中心' }
+                },
             ]
         },
         ////学员路由
-
         {
             path: '/studentLogin',
             component: () => import(/* webpackChunkName: "login" */ '../components/user/student/StudentLogin.vue'),
@@ -167,6 +200,12 @@ export default new Router({
             path: '/coachRegister',
             component: () => import(/* webpackChunkName: "register" */ '../components/user/coach/CoachRegister.vue'),
             meta: { title: '注册' }
+        },
+        //管理员登录路由
+        {
+            path: '/adminLogin',
+            component: () => import(/* webpackChunkName: "login" */ '../components/user/admin/AdminLogin.vue'),
+            meta: { title: '登录' }
         },
         {
             path: '*',

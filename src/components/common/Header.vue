@@ -79,8 +79,11 @@ export default {
                     localStorage.removeItem('ms_role')
                     this.$router.push('/studentLogin');
                 }else if(role === '1'){
-                    localStorage.removeItem('ms_role')
+                    localStorage.removeItem('ms_username')
                     this.$router.push('/coachLogin');
+                }else if(role === '2'){
+                    localStorage.removeItem('ms_username')
+                    this.$router.push('/adminLogin');
                 }
             }
             if (command == 'myInfo'){

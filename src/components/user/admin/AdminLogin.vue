@@ -3,7 +3,7 @@
         <div class="ms-login">
             <div>
             </div>
-            <div class="ms-title">教练登录</div>
+            <div class="ms-title">管理员登录</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="param.username" placeholder="username">
@@ -22,12 +22,6 @@
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
-                </div>
-                <div class="login-btn">
-                    <el-button type="primary" @click="register()">注册</el-button>
-                </div>
-                <div>
-                    <el-link type="primary" @click="studentLogin()">学员登录中心</el-link>
                 </div>
             </el-form>
         </div>
@@ -50,20 +44,11 @@ export default {
         };
     },
     methods: {
-        studentLogin() {
-            this.$router.push('/studentLogin')
-        },
-        coachLogin() {
-            this.$router.push('/coachLogin')
-        },
-        register(){
-            this.$router.push('/coachRegister')
-        },
         submitForm() {
             const _this = this;
             this.$refs.login.validate(valid => {
                 if (valid) {
-                    axiso.post('api/coach/coach/login',this.param).then(function (response) {
+                    axiso.post('api/surper/admin/login',this.param).then(function (response) {
                         const data = response.data;
                         if (data.status === 0) {
                             _this.$message.success(data.msg)
@@ -71,7 +56,7 @@ export default {
                             localStorage.setItem("ms_username",_this.param.username)
                             localStorage.setItem("ms_id",data.data.id)
                             localStorage.setItem("ms_role",data.data.role)
-                            _this.$router.push('/coachDashboard')
+                            _this.$router.push('/adminDashboard')
                         } else if (response.data.status === 1) {
                             _this.$message.error(data.msg);
                             console.log(data.msg);

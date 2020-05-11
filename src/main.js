@@ -28,11 +28,10 @@ router.beforeEach((to, from, next) => {
     const role = localStorage.getItem('ms_username');
     let path = to.path;
     if (!role && path !== '/studentLogin') {
-        console.log("xixi")
-        console.log(path)
         //配置可跳转路由
         if (path === '/studentLogin' || path === '/studentRegister' ||
-            path === '/coachLogin' || path === '/coachRegister'){
+            path === '/coachLogin' || path === '/coachRegister' ||
+            path === '/adminLogin'){
             console.log("path")
             next();
         }else {

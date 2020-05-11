@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 我的学员
+                    <i class="el-icon-lx-cascades"></i> 注册审核
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -30,11 +30,32 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="username" label="学员名称"></el-table-column>
-                <el-table-column prop="sex" label="性别"></el-table-column>
-                <el-table-column prop="phone" label="电话"></el-table-column>
-                <el-table-column prop="email" label="邮箱"></el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
+                <el-table-column type="selection" width="55" align="center"></el-table-column>
+                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
+                <el-table-column prop="coachId" label="教练ID"></el-table-column>
+                <el-table-column prop="coachName" label="教练名称"></el-table-column>
+                <el-table-column label="注册时间">
+                    <template slot-scope="scope">{{$moment(scope.row.registime).format('YYYY-MM-DD HH:MM:ss')}}</template>
+                </el-table-column>
+                <el-table-column label="审核状态" >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.status==='0'">未审核</span>
+                        <span v-if="scope.row.status==='1'">已审核</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="180" align="center">
+                    <template slot-scope="scope">
+                        <el-button v-if="scope.row.status==='0'"
+                                type="text"
+                                icon="el-icon-edit"
+                                @click="active(scope.row.coachId)"
+                        >同意</el-button>
+                        <el-button v-if="scope.row.status==='1'"
+                                   type="info"
+                                   icon="el-icon-edit"
+                        >已审核</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -47,57 +68,6 @@
                 ></el-pagination>
             </div>
         </div>
-
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="开始时间">
-                    <el-col :span="11">
-                        <el-date-picker
-                                type="date"
-                                placeholder="选择日期"
-                                v-model="form.startTime"
-                                value-format="yyyy-MM-dd"
-                                style="width: 100%;"
-                        ></el-date-picker>
-                    </el-col>
-                    <el-col class="line" :span="2">-</el-col>
-                    <el-col :span="11">
-                        <el-time-picker
-                                placeholder="选择时间"
-                                v-model="form.startTime"
-                                style="width: 100%;"
-                        ></el-time-picker>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="结束时间">
-                    <el-col :span="11">
-                        <el-date-picker
-                                type="date"
-                                placeholder="选择日期"
-                                v-model="form.endTime"
-                                value-format="yyyy-MM-dd"
-                                style="width: 100%;"
-                        ></el-date-picker>
-                    </el-col>
-                    <el-col class="line" :span="2">-</el-col>
-                    <el-col :span="11">
-                        <el-time-picker
-                                placeholder="选择时间"
-                                v-model="form.endTime"
-                                style="width: 100%;"
-                        ></el-time-picker>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="预约备注">
-                    <el-input type="textarea" rows="5" v-model="form.remarks"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -106,7 +76,7 @@
     import axios from 'axios';
 
     export default {
-        name: 'basetable',
+        name: 'audit',
         data() {
             return {
                 query: {
@@ -132,7 +102,7 @@
         methods: {
             // 获取 easy-mock 的模拟数据
             list() {
-                let path = '/api/student/student/list';
+                let path = '/api/admin/verify/all';
                 let _this = this;
                 console.log(path)
                 axios.get(path).then(function(res) {
@@ -146,6 +116,19 @@
             handleSearch() {
                 this.$set(this.query, 'pageIndex', 1);
                 this.getData();
+            },
+            // 删除操作
+            handleDelete(id, index, row) {
+                let _this = this
+                // 二次确认删除
+                this.$confirm('确定要删除吗？', '提示', {
+                    type: 'warning'
+                }).then(() => {
+                    axios.delete('/api/student/reservation/' + id).then(function(data) {
+                        _this.$message.success("删除成功");
+                        _this.tableData.splice(index, 1);
+                    })
+                }).catch(() => {});
             },
             // 多选操作
             handleSelectionChange(val) {
@@ -166,17 +149,13 @@
                 let _this = this
                 _this.form = row;
                 _this.idx = index;
-                _this.editVisible = true;
             },
             // 保存编辑
-            saveEdit() {
-                this.editVisible = false;
-                this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-                this.$set(this.tableData, this.idx, this.form);
-                let _this = thisd
-                console.log(this.form)
-                axios.put('/api/student/reservation/modify',_this.form).then(function(data) {
-                    _this.$message("修改成功")
+            active(coachId) {
+                let _this = this;
+                axios.put('/api/admin/verify/active/' + coachId).then(function(data) {
+                    _this.$message("审核通过")
+                    _this.list();
                 })
             },
             // 分页导航
