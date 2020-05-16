@@ -6,7 +6,7 @@
             <div class="ms-title">管理员登录</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
+                    <el-input v-model="param.name" placeholder="username">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
@@ -34,7 +34,7 @@ export default {
     data: function() {
         return {
             param: {
-                username: '',
+                name: '',
                 password: '',
             },
             rules: {
