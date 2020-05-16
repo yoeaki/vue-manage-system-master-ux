@@ -129,8 +129,6 @@ export default {
             editVisible: false,
             pageTotal: 0,
             form: {},
-            idx: -1,
-            id: -1
         };
     },
     created() {
@@ -205,6 +203,7 @@ export default {
             let _this = thisd
             console.log(this.form)
             axios.put('/api/student/reservation/modify',_this.form).then(function(data) {
+                this.form.
                 _this.$message("修改成功")
             })
         },

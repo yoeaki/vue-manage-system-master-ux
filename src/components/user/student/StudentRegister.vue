@@ -18,6 +18,18 @@
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
+                <el-form-item prop="username">
+                    <el-form-item>
+                        <el-select v-model="coachId" placeholder="请选择">
+                            <el-option
+                                    v-for="item in coach"
+                                    :key="item.username"
+                                    :label="item.username"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="register()">注册</el-button>
                 </div>
@@ -37,18 +49,36 @@ export default {
             param: {
                 username: '',
                 password: '',
+                coachId: '',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
             },
+            coach:[],
+            coachId:''
         };
     },
+    created(){
+        this.getCoach();
+    },
     methods: {
+        getCoach() {
+            let path = '/api/coach/coach/list';
+            console.log(path)
+            let _this = this;
+            axiso.get(path).then(function(res) {
+                console.log(res)
+                let data = res.data.data;
+                _this.coach = data;
+            })
+        },
         register() {
             const _this = this;
             this.$refs.login.validate(valid => {
                 if (valid) {
+                    _this.param.coachId = _this.coachId;
+                    console.log(_this.coachId)
                     axiso.post('api/student/student/register',this.param).then(function (response) {
                         const data = response.data;
                         if (data.status === 0) {
