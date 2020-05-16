@@ -9,16 +9,6 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button
-                    type="primary"
-                    icon="el-icon-delete"
-                    class="handle-del mr10"
-                    @click="delAllSelection"
-                >批量删除</el-button>
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
-                </el-select>
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="openAdd">新增教练</el-button>
@@ -37,20 +27,10 @@
                 <el-table-column prop="email" label="邮箱"></el-table-column>
                 <el-table-column prop="address" label="地址"></el-table-column>
             </el-table>
-            <div class="pagination">
-                <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageIndex"
-                    :page-size="query.pageSize"
-                    :total="pageTotal"
-                    @current-change="handlePageChange"
-                ></el-pagination>
-            </div>
         </div>
 
         <!-- 编辑弹出框 -->
-       
+
         <el-dialog title="新增教练" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
                 <el-form-item label="教练名称">
@@ -128,7 +108,7 @@ export default {
         addCoach(){
             let _this = this;
             _this.editVisible = false;
-            axios.post('/api/coach/coach',_this.coach).then(function(res) {
+            axios.post('/api/coach/coach/register',_this.coach).then(function(res) {
                 _this.load();
                 axios.post('/api/coach/car',_this.car).then(function(res) {
                     _this.$message.success("新增成功")

@@ -20,6 +20,11 @@
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
+                <el-form-item prop="username">
+                    <el-input v-model="param.coachId" placeholder="coachId">
+                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                    </el-input>
+                </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
@@ -75,7 +80,7 @@ export default {
                             localStorage.setItem("ms_username",_this.param.username)
                             localStorage.setItem("ms_id",data.data.id)
                             localStorage.setItem("ms_role",data.data.role)
-                            _this.$router.push('/studentDashboard')
+                            _this.$router.push('/drag')
                         } else if (response.data.status === 1) {
                             _this.$message.error(data.msg);
                             console.log(data.msg);

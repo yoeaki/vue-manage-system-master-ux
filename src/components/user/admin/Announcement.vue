@@ -9,16 +9,6 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button
-                        type="primary"
-                        icon="el-icon-delete"
-                        class="handle-del mr10"
-                        @click="delAllSelection"
-                >批量删除</el-button>
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
-                </el-select>
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="publish">发布公告</el-button>
@@ -40,7 +30,7 @@
                     <template slot-scope="scope">{{$moment(scope.row.annTime).format('YYYY-MM-DD HH:MM:ss')}}</template>
                 </el-table-column>
                 <el-table-column prop="adminName" label="发布人"></el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" width="180" align="center" v-if="role==2">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
@@ -57,14 +47,6 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.pageIndex"
-                        :page-size="query.pageSize"
-                        :total="pageTotal"
-                        @current-change="handlePageChange"
-                ></el-pagination>
             </div>
         </div>
 
@@ -161,6 +143,7 @@
                 editVisible: false,
                 publishEditVisible: false,
                 pageTotal: 0,
+                role:'0',
                 form: {
                     adminId: '',
                     name: '',
@@ -173,6 +156,7 @@
         },
         created() {
             // this.getData();
+            this.role = localStorage.getItem('ms_role')
             this.list();
             this.username = localStorage.getItem('ms_username')
         },

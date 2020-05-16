@@ -9,16 +9,6 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button
-                        type="primary"
-                        icon="el-icon-delete"
-                        class="handle-del mr10"
-                        @click="delAllSelection"
-                >批量删除</el-button>
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
-                </el-select>
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
@@ -58,14 +48,6 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.pageIndex"
-                        :page-size="query.pageSize"
-                        :total="pageTotal"
-                        @current-change="handlePageChange"
-                ></el-pagination>
             </div>
         </div>
     </div>
@@ -152,6 +134,7 @@
             },
             // 保存编辑
             active(coachId) {
+                console.log("教練id：" + coachId)
                 let _this = this;
                 axios.put('/api/admin/verify/active/' + coachId).then(function(data) {
                     _this.$message("审核通过")

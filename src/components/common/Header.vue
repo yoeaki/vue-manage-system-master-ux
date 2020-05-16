@@ -10,7 +10,9 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">驾校预约管理系统</div>
+        <div v-if="role==0" class="logo">学员预约系统</div>
+        <div v-if="role==1" class="logo">教练预约系统</div>
+        <div v-if="role==2" class="logo">管理员内部系统</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -59,11 +61,13 @@ export default {
             collapse: false,
             fullscreen: false,
             name: 'linxin',
-            message: 2
+            message: 2,
+            role:''
         };
     },
     computed: {
         username() {
+            this.role = localStorage.getItem("ms_role")
             let username = localStorage.getItem('ms_username');
             return username ? username : this.name;
         }
